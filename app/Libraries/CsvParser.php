@@ -3,15 +3,16 @@
 
 namespace App\Libraries;
 
-
 use Iterator;
 
+/**
+ * Provide an Iterator interface to parsed lines and fields of a CSV file
+ */
 class CsvParser implements Iterator
 {
     private $mFileHandle = null;
     private $mRowNo = 1;
     private $mParsedRow = null;
-
 
     public function __construct($fileHandle)
     {

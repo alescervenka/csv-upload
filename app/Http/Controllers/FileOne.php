@@ -3,46 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Libraries\RequestCsvParser;
 use App\FileoneRow;
 use Exception;
 
+/**
+ * Controller for the first CSV file
+ */
 class FileOne extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Store the CSV file in a database
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //Log::info('POST was called on the FileOne controller '. $request->fullUrl());
         $parser = new RequestCsvParser($request);
         $csvIterator = $parser->getIterator();
 
         $unimported = array();
 
         foreach ($csvIterator as $item) {
-            //Log::info('polozka "' .  implode('", "', $item) . '"');
 
             if ((count($item) == 2) and (ctype_alnum($item[0]))) {
-                //Log::info('inserting');
+
                 try {
                     FileoneRow::create(['record_id' => $item[0], 'record_name' => $item[1]]);
                 } catch (Exception $e) {
                     if ($e->getCode() == 23000) {
+                        // duplicate entry
                         array_push($unimported, $item);
                     } else {
-                        error_log($e->getCode());
-                        error_log($e->getFile());
-                        error_log($e->getMessage());
                         throw($e);
                     }
-
                 }
             } else {
-                //Log::info('goes to unimported');
                 array_push($unimported, $item);
             }
         }
@@ -51,9 +47,9 @@ class FileOne extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified record.
      *
-     * @param  int  $id
+     * @param  int  $id Record ID
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)

@@ -4,8 +4,11 @@
 namespace App\Libraries;
 
 use Illuminate\Http\Request;
-use App\Libraries\CsvParser;
+use Iterator;
 
+/**
+ * Parse CSV files extracted from HTTP requests
+ */
 class RequestCsvParser
 {
 
@@ -40,6 +43,12 @@ class RequestCsvParser
         }
     }
 
+    /**
+     * Provides an iterator over the parsed CSV lines
+     * Each element returned by the iterator is an array of parsed fields.
+     *
+     * @return Iterator
+     */
     public function getIterator() {
         rewind($this->mFileHandle);
         return new CsvParser($this->mFileHandle);
