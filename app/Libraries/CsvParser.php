@@ -9,13 +9,13 @@ use Iterator;
 class CsvParser implements Iterator
 {
     private $mFileHandle = null;
-    private $rowNo = 1;
+    private $mRowNo = 1;
     private $mParsedRow = null;
 
 
-    public function __construct($fileHandler)
+    public function __construct($fileHandle)
     {
-        $this->mFileHandle = $fileHandler;
+        $this->mFileHandle = $fileHandle;
     }
 
     public function current() {
@@ -23,15 +23,15 @@ class CsvParser implements Iterator
     }
 
     public function key() {
-        return $this->rowNo - 1;
+        return $this->mRowNo - 1;
     }
 
     public function next() {
-        $this->rowNo++;
+        $this->mRowNo++;
     }
 
     public function rewind() {
-        $this->rowNo = 1;
+        $this->mRowNo = 1;
         rewind($this->mFileHandle);
     }
 
