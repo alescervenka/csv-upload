@@ -20,13 +20,13 @@ class FileOneTest extends TestCase
         $content = Storage::disk('tests')->get('TechnicalAssignmentSampleDataFile1.csv');
         $this->json('POST', 'api/fileone', ['data' => $content])
             ->assertStatus(200)
-            ->assertJsonStructure(['unimported' => []]);
+            ->assertExactJson(['unimported' => []]);
 
         //Additionally, allow a dataset to be retrieved by Record ID.
 
         $this->json('GET', 'api/fileone/63ds')
             ->assertStatus(200)
-            ->assertJson(['Record ID' => '63ds', 'Name' => 'Another Record']);
+            ->assertExactJson(['Record ID' => '63ds', 'Name' => 'Another Record']);
     }
 
     public function testJsonWithoutFile()
@@ -46,11 +46,11 @@ class FileOneTest extends TestCase
         $content = Storage::disk('tests')->get('TechnicalAssignmentSampleDataFile1.csv');
         $this->json('POST', 'api/fileone', ['data' => $content])
             ->assertStatus(200)
-            ->assertJson(['unimported' => []]);
+            ->assertExactJson(['unimported' => []]);
 
         $this->json('POST', 'api/fileone', ['data' => $content])
             ->assertStatus(200)
-            ->assertJson(['unimported' => [
+            ->assertExactJson(['unimported' => [
                 ['23d2','First Entry'],
                 ['63ds','Another Record'],
                 ['32nm','Yet Another Record']
@@ -58,7 +58,7 @@ class FileOneTest extends TestCase
 
         $this->json('GET', 'api/fileone/63ds')
             ->assertStatus(200)
-            ->assertJson(['Record ID' => '63ds', 'Name' => 'Another Record']);
+            ->assertExactJson(['Record ID' => '63ds', 'Name' => 'Another Record']);
     }
 
     public function testJsonInvalidRows()
@@ -75,7 +75,7 @@ class FileOneTest extends TestCase
 
         $this->json('POST', 'api/fileone', ['data' => $content])
             ->assertStatus(200)
-            ->assertJson(['unimported' => [
+            ->assertExactJson(['unimported' => [
                 ['de/f','record two'],
                 ['jkl'],
                 ['mno', 'record five', 'with details'],
@@ -86,7 +86,7 @@ class FileOneTest extends TestCase
 
         $this->json('GET', 'api/fileone/pqr')
             ->assertStatus(200)
-            ->assertJson(['Record ID' => 'pqr', 'Name' => 'record six']);
+            ->assertExactJson(['Record ID' => 'pqr', 'Name' => 'record six']);
 
     }
 
@@ -95,10 +95,10 @@ class FileOneTest extends TestCase
         $content = Storage::disk('tests')->get('TechnicalAssignmentSampleDataFile1.csv');
         $this->post('api/fileone', ['data' => $content])
             ->assertStatus(200)
-            ->assertJsonStructure(['unimported' => []]);
+            ->assertExactJson(['unimported' => []]);
 
         $this->json('GET', 'api/fileone/63ds')
             ->assertStatus(200)
-            ->assertJsonStructure(['Record ID' => '63ds', 'Name' => 'Another Record']);
+            ->assertExactJson(['Record ID' => '63ds', 'Name' => 'Another Record']);
     }
 }
