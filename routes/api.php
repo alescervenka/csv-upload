@@ -14,11 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
-//Route::resource('fileone', 'FileOne');
 Route::post('/fileone', 'FileOne@store');
 Route::get('/fileone/{recordid}', 'FileOne@show');
+
+Route::post('/filetwo', 'FileTwo@store');
+Route::get('/filetwo/{recordid}', 'FileTwo@show');
 
