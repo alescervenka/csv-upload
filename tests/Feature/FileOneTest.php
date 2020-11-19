@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
+use Illuminate\Http\UploadedFile;
 
 
 class FileOneTest extends TestCase
@@ -91,8 +92,14 @@ class FileOneTest extends TestCase
 
     public function testPostUploadLmnAdFile()
     {
-        $content = Storage::disk('tests')->get('TechnicalAssignmentSampleDataFile1.csv');
-        $this->post('api/fileone', ['data' => $content])
+        $inputFilePath = 'storage/tests/TechnicalAssignmentSampleDataFile1.csv';
+        $file = new UploadedFile($inputFilePath,
+            'data.csv',
+            filesize($inputFilePath),
+            null,
+            true
+        );
+        $this->call('post', 'api/fileone', [], [], ['data' => $file])
             ->assertStatus(200)
             ->assertExactJson(['unimported' => []]);
 

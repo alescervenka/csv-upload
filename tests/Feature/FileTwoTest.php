@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
+use Illuminate\Http\UploadedFile;
 
 
 class FileTwoTest extends TestCase
@@ -159,12 +160,12 @@ class FileTwoTest extends TestCase
 
     public function testPostUploadLmnAdFiles()
     {
-        $content = "abc,record one";
-        $this->post('api/fileone', ['data' => $content]);
+        $file1 = UploadedFile::fake()->createWithContent('data.csv', "abc,record one");
+        $this->call('post', 'api/fileone', [], [], ['data' => $file1]);
 
-        $content = "abc,2/2/2020,click,12";
+        $file2 = UploadedFile::fake()->createWithContent('data.csv', "abc,2/2/2020,click,12");
 
-        $this->post('api/two', ['data' => $content])
+        $this->call('post', 'api/filetwo', [], [], ['data' => $file2])
             ->assertStatus(200)
             ->assertExactJson(['unimported' => []]);
 

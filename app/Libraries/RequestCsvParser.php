@@ -35,11 +35,14 @@ class RequestCsvParser
             }
         } else {
             if ($request->hasFile('data')) {
-                error_log('this one is a POST with the data file');
+                if ($request->file('data')->isValid()) {
+                    $this->mFileHandle = fopen($request->file('data')->path(), 'r+');
+                } else {
+                    abort(400, 'File "data" is not valid');
+                }
             } else {
-                error_log('this one is a POST without the data file');
+                abort(400, 'Request does not contain the "data" file');
             }
-            abort(400, 'stay tuned for more');
         }
     }
 
